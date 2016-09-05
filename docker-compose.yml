@@ -1,0 +1,39 @@
+version: '2'
+services:
+  drupal-web:
+    build: ./web/
+    ports:
+      - "8080:80"
+      - "8022:22"
+    depends_on:
+      - mysql-server
+    links:
+      - mysql-server:mysql      
+      - solr
+    environment:
+      MYSQL_DATABASE: drupal
+      MYSQL_ROOT_PASSWORD: drupal
+      MYSQL_USER: drupal
+      MYSQL_PASSWORD: drupal
+      MYSQL_HOST: mysql
+      GIT_USER: username
+      GIT_PASSWORD: ***
+      FILENAME: 2016-49-18-09-49-18.sql.gz
+      UPDATE_DB: 1
+    volumes:
+      - /home/user/webdev/drupal-test5/htmlroot:/var/www/html
+  mysql-server:
+    image: mysql
+    environment:
+      MYSQL_DATABASE: drupal
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: drupal
+      MYSQL_PASSWORD: drupal
+    volumes:
+      - /home/user/webdev/drupal-test5/mysql:/var/lib/mysql
+    ports:
+      - "3306"
+  solr:
+    build: ./solr/
+    ports:
+      - "8984:8983"
