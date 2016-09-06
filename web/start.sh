@@ -36,13 +36,16 @@ else
     cd /var/www/html
     git pull
 
-    if [[ ${UPDATE_DB} ]]; then
+    if [[ "${UPDATE_DB}" = "1" ]]; then
         DATABASE_REPO="https://${GIT_USER}:${GIT_PASSWORD}@github.com/szmediathek/databases.git"
         cd /var/www/html
-        if [ ! -f /var/www/html/db/${FILENAME} ] ; then
+        #todo: check folder not file
+        if [ ! -d /var/www/html/db ] ; then
             git clone ${DATABASE_REPO} db
         else
+            cd db
             git pull
+            cd ..
         fi
         cd db
         echo "02. unzip sql file"
