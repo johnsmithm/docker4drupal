@@ -9,7 +9,7 @@ if [ ! -f /var/www/html/sites/default/settings.php ] ; then
     rm -rf html
     git clone ${GIT_REPO} html
     cd html
-    git checkout stage
+    git checkout ${GIT_BRANCH}
 
     echo "03. setting database"
     mv /tmp/settings.php sites/default/settings.php
@@ -56,6 +56,14 @@ else
         drush sql-cli < /tmp/db1.sql
         rm /tmp/db1.sql
     fi
+fi
+
+if [[ "${GIT_BRANCH}" = "stage" ]] ; then
+    echo 'root:root' | chpasswd
+    sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+    mkdir /var/run/sshd && chmod 0755 /var/run/sshd
+    mkdir -p /root/.ssh/ && touch /root/.ssh/authorized_keys
+    sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
 fi
 
 exec supervisord -n
