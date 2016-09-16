@@ -36,7 +36,7 @@ else
     cd /var/www/html
     git pull
 
-    if [[ "${UPDATE_DB}" = "1" ]]; then
+    if [ "${UPDATE_DB}" = "1" ]; then
         DATABASE_REPO="https://${GIT_USER}:${GIT_PASSWORD}@github.com/szmediathek/databases.git"
         cd /var/www/html
         #todo: check folder not file
@@ -58,7 +58,7 @@ else
     fi
 fi
 
-if [[ "${GIT_BRANCH}" = "stage" ]] ; then
+if [[ "${MYSQL_HOST}" = "mysql" ]] ; then
     echo 'root:root' | chpasswd
     sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
     mkdir /var/run/sshd && chmod 0755 /var/run/sshd
