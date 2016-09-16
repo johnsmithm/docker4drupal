@@ -10,7 +10,7 @@ if [ ! -f /var/www/html/sites/default/settings.php ] ; then
     git clone ${GIT_REPO} html
     cd html
     git checkout ${GIT_BRANCH}
-
+    mkdir -p sites/default/files && chmod 755 sites/default && chown -R www-data:www-data sites/default/files
     echo "03. setting database"
     mv /tmp/settings.php sites/default/settings.php
     sed -i "s/placeholder_PWD/${MYSQL_ROOT_PASSWORD}/g" sites/default/settings.php
