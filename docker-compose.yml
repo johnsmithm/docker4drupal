@@ -3,8 +3,9 @@ services:
   drupal-web:
     build: ./web/
     ports:
-      - "8080:80"
+      - "8081:80"
       - "8022:22"
+      - "8021:21"
     depends_on:
       - mysql-server
     links:
@@ -16,24 +17,25 @@ services:
       MYSQL_USER: drupal
       MYSQL_PASSWORD: drupal
       MYSQL_HOST: mysql
-      GIT_USER: ***
-      GIT_PASSWORD: ***
+      GIT_USER: no
+      GIT_PASSWORD: no
       FILENAME: dev1.sql.gz
       UPDATE_DB: 0
       GIT_BRANCH: stage
+      FTP: 1
     volumes:
-      - /home/mosnoi/webdev/drupal-test5/htmlroot:/var/www/html
+      - /home/user/webdev/drupal-test5/htmlroot:/var/www/html
   mysql-server:
     image: mysql
     environment:
       MYSQL_DATABASE: drupal
-      MYSQL_ROOT_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: drupal
       MYSQL_USER: drupal
       MYSQL_PASSWORD: drupal
     volumes:
-      - /home/mosnoi/webdev/drupal-test5/mysql:/var/lib/mysql
+      - /home/user/webdev/drupal-test5/mysql:/var/lib/mysql
     ports:
-      - "3306"
+      - "3301:3306"
   solr:
     build: ./solr/
     ports:

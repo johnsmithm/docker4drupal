@@ -24,6 +24,8 @@ RUN apt-get install -y \
 	wget \
 	unzip \
 	supervisor
+
+RUN apt-get install -y --no-install-recommends vsftpd
 RUN apt-get clean
 
 # Setup PHP.
@@ -80,6 +82,7 @@ RUN echo -e '[program:apache2]\ncommand=/bin/bash -c "source /etc/apache2/envvar
 RUN echo -e '[program:mysql]\ncommand=/usr/bin/pidproxy /var/run/mysqld/mysqld.pid /usr/sbin/mysqld\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
 RUN echo -e '[program:sshd]\ncommand=/usr/sbin/sshd -D\n\n' >> /etc/supervisor/supervisord.conf
 RUN echo -e '[program:blackfire]\ncommand=/usr/local/bin/launch-blackfire\n\n' >> /etc/supervisor/supervisord.conf
+RUN echo -e '[program:vsftpd]\ncommand=vsftpd\n\n' >> /etc/supervisor/supervisord.conf
 
 # Setup XDebug.
 RUN echo "xdebug.max_nesting_level = 300" >> /etc/php5/apache2/conf.d/20-xdebug.ini
@@ -99,10 +102,14 @@ RUN wget https://github.com/drush-ops/drush/releases/download/8.1.2/drush.phar &
   && mv drush.phar /usr/local/bin/drush
 
 
-EXPOSE 80 3306 22 443
+EXPOSE 80 3306 22 443 21 20
 
 ADD ./start.sh /start.sh
 ADD ./settings.php /tmp/settings.php
+ADD ./settings.php /tmp/settings.php
 RUN chmod 755 /start.sh
+ADD ./vsftpd.conf /etc/vsftpd.conf
+RUN mkdir /ftp
+RUN mkdir -p /var/run/vsftpd/empty
 
 CMD ["/bin/bash", "/start.sh"]
