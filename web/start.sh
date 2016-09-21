@@ -40,13 +40,8 @@ else
         DATABASE_REPO="https://${GIT_USER}:${GIT_PASSWORD}@github.com/szmediathek/databases.git"
         cd /var/www/html
         #todo: check folder not file
-        if [ ! -d /var/www/html/db ] ; then
-            git clone ${DATABASE_REPO} db
-        else
-            cd db
-            git pull
-            cd ..
-        fi
+	rm -rf db
+        git clone ${DATABASE_REPO} db
         cd db
         echo "02. unzip sql file"
         gunzip -c ${FILENAME} > /tmp/db1.sql
@@ -68,20 +63,6 @@ fi
 
 if [[ "${FTP}" = "1" ]] ; then
    echo "setting up ftp"
-   #sed -i "s/listen=NO/listen=YES/g"  /etc/vsftpd.conf
-   #sed -i "s/#local_enable=YES/local_enable=YES/g"  /etc/vsftpd.conf
-   #sed -i "s/#write_enable=YES/write_enable=YES/g"  /etc/vsftpd.conf
-   #sed -i "s/#local_umask=022/local_umask=022/g"  /etc/vsftpd.conf
-   #sed -i "s/#anon_upload_enable=YES/anon_upload_enable=YES/g"  /etc/vsftpd.conf
-   #sed -i "s/#anon_mkdir_write_enable=YES/anon_mkdir_write_enable=YES/g"  /etc/vsftpd.conf
-   #echo "local_root=/var/www/html" >> /etc/vsftpd.conf
-	#echo "local_enable=YES" >> /etc/vsftpd.conf
-	#echo "chroot_local_user=YES" >> /etc/vsftpd.conf
-	#echo "write_enable=YES" >> /etc/vsftpd.conf
-	#echo "local_umask=022" >> /etc/vsftpd.conf
-	#sed -i "s/anonymous_enable=YES/anonymous_enable=NO/" /etc/vsftpd.conf
-	#mkdir -p /var/run/vsftpd/empty
-   	#service vsftpd restart
 	USER=ion
 	PASS=ionel
 	if ( id ${USER} ); then
