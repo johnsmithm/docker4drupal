@@ -26,5 +26,6 @@ RUN wget -nv http://ftp.drupal.org/files/projects/apachesolr-7.x-1.7.tar.gz && \
   tar -xvzf  apachesolr-7.x-* && \
   cp apachesolr/solr-conf/solr-4.x/* /opt/solr/example/solr/collection1/conf && \
   rm -rf ./apachesolr-*
-
+RUN mkdir -p /opt/solr/example/solr/collection1
+RUN chown 8983:8983 /opt/solr/example/solr/collection1
 CMD ["/bin/bash", "-c", "/opt/solr/bin/solr -f"]

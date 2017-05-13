@@ -4,39 +4,26 @@ services:
     build: ./web/
     ports:
       - "8081:80"
-      - "8022:22"
-      - "8021:21"
-    depends_on:
-      - mysql-server
+      - "8021:22"
     links:
-      - mysql-server:mysql      
       - solr
     environment:
-      MYSQL_DATABASE: drupal
-      MYSQL_ROOT_PASSWORD: drupal
-      MYSQL_USER: drupal
-      MYSQL_PASSWORD: drupal
-      MYSQL_HOST: mysql
-      GIT_USER: no
-      GIT_PASSWORD: no
+      MYSQL_DATABASE: dev1
+      MYSQL_ROOT_PASSWORD: pasa
+      MYSQL_USER: roots
+      MYSQL_PASSWORD: pss
+      MYSQL_HOST: 192.168.148.199
+      GIT_USER: sde
+      GIT_PASSWORD: gh
       FILENAME: dev1.sql.gz
       UPDATE_DB: 0
       GIT_BRANCH: stage
-      FTP: 1
+      FTP: 0
     volumes:
-      - /home/user/webdev/drupal-test5/htmlroot:/var/www/html
-  mysql-server:
-    image: mysql
-    environment:
-      MYSQL_DATABASE: drupal
-      MYSQL_ROOT_PASSWORD: drupal
-      MYSQL_USER: drupal
-      MYSQL_PASSWORD: drupal
-    volumes:
-      - /home/user/webdev/drupal-test5/mysql:/var/lib/mysql
-    ports:
-      - "3301:3306"
+      - /drupal/web-dev/files/dev1/htmlroot:/var/www/html
   solr:
     build: ./solr/
     ports:
-      - "8984:8983"
+      - "8981:8983"
+    volumes:
+      - /drupal/web-dev/files/dev1/solr:/opt/solr-4.10.4/example/solr/collection1/data
